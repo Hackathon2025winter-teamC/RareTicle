@@ -59,6 +59,11 @@ docker-compose up
 
 http://localhost:8080/ を開く
 
+下記画面が表示されれば成功
+
+![Django 初期画面](https://github.com/user-attachments/assets/ebd97b95-840e-4fde-a536-31d6b9fdd4d2)
+
+
 ## その他
 
 エラーが起きたらログを確認して調査する
