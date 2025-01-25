@@ -1,44 +1,48 @@
 version: "3.8"
 
 services:
-  web:
-    build: .
-    command: >
-      sh -c "
-        echo 'Waiting for database...' &&
-        while ! nc -z db 3306; do
-          sleep 1
-        done &&
-        echo 'Database is ready!' &&
-        python manage.py migrate &&
-        python manage.py runserver 0.0.0.0:8080
-      "
-    volumes:
-      - .:/app
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    environment:
-      - DJANGO_DB_HOST=db
-      - DJANGO_DB_PORT=3306
-      - DJANGO_DB_NAME=myproject
-      - DJANGO_DB_USER=django_user
-      - DJANGO_DB_PASSWORD=django_password
-
+  # データベースサービス
   db:
     image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass # MySQL の root ユーザーのパスワード
+      MYSQL_DATABASE: django_db # 作成されるデフォルトのデータベース名
+      MYSQL_USER: django # 作成されるデータベースユーザー名
+      MYSQL_PASSWORD: django_pass # "django" ユーザーのパスワード
     volumes:
       - mysql_data:/var/lib/mysql
-    environment:
-      - MYSQL_DATABASE=myproject
-      - MYSQL_USER=django_user
-      - MYSQL_PASSWORD=django_password
-      - MYSQL_ROOT_PASSWORD=rootpassword
     ports:
-      - "3306:3306"
+      - "3306:3306" # MySQL のデフォルトポートをホストの 3306 に公開
 
+  # Djangoアプリケーションサービス
+  web:
+    build:
+      context: . # 現在のディレクトリをビルドのコンテキストに指定
+      dockerfile: dockerfile
+    # アプリケーションサーバーとして Gunicorn を起動し、ポート8000でリクエストを待機
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+    expose:
+      - 8000 # ホストには公開せず、他のコンテナからの接続を許可するポート
+    depends_on:
+      - db # "db" サービスが起動してからこのサービスが起動するよう設定
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings # Django の設定ファイルを指定
+
+  # Nginxサービス
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d # ホストの Nginx 設定ファイルをコンテナにマウント
+      - static_volume:/app/static # 静的ファイルをホストと共有
+    ports:
+      - "8080:80" # ホストの8080ポートをコンテナの80ポートにマッピング
+    depends_on:
+      - web # "web" サービスが起動してからこのサービスが起動するよう設定
+
+# データを永続化するためのボリュームを定義する場所(コンテナを停止、削除してもデータが保持される)
 volumes:
-  mysql_data:
+  mysql_data: # MySQL 用の永続化ボリューム
+  static_volume: # 静的ファイル用の永続化ボリューム
