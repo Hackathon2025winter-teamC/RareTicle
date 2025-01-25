@@ -77,14 +77,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DJANGO_DB_NAME', 'myproject'),
-        'USER': os.environ.get('DJANGO_DB_USER', 'django_user'),
-        'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', 'django_password'),
-        'HOST': os.environ.get('DJANGO_DB_HOST', 'db'),
-        'PORT': os.environ.get('DJANGO_DB_PORT', '3306'),
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
+        'NAME': os.environ.get('DB_NAME', 'django_db'),
+        'USER': os.environ.get('DB_USER', 'django'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'django_pass'),
+        'HOST': os.environ.get('DB_HOST', 'db'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
     }
 }
 
