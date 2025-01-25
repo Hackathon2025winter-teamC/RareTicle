@@ -29,6 +29,7 @@ Docker Compose version v2.3.3
 
 ```bash
 docker-compose run web django-admin startproject config .
+docker-compose run web python manage.py startapp myapp apps/myapp
 ```
 
 ### 準備
