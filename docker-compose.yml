@@ -18,7 +18,7 @@ services:
   web:
     build:
       context: . # 現在のディレクトリをビルドのコンテキストに指定
-      dockerfile: dockerfile
+      dockerfile: dockerfile 
     # アプリケーションサーバーとして Gunicorn を起動し、ポート8000でリクエストを待機
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
     volumes:
