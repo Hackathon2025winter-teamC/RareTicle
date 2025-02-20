@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -247,7 +248,6 @@
     <header>
         <div class="logo">Rareticle</div>
         <div class="header-right">
-            <a href="#" class="user-profile"><i class="fa-solid fa-user"></i> マイページ</a>
             <button class="logout-btn">Logout</button>
         </div>
     </header>
@@ -261,22 +261,23 @@
             </button>
         </form>
         <div class="search-links">
-            <a href="#">戻る / Return</a>
+            <a href="./index.html">戻る / Return</a>
         </div>
     </div>
 
     <main>
         <section class="post">
             <div class="post-text">
-                <h2 class="post-title">記事１</h2>
-                <p class="post-content">記事本文プレビュー</p>
+                <!--  引数はこのテンプレートを使ってくくる　{{data_variable}} -->
+                <h2 class="post-title">引数指定：APIと連携して記事タイトルを取得</h2>
+                <p class="post-content">引数指定：APIと連携して記事本文を取得</p>
             </div>
         </section>
 
         <section class="post">
             <div class="post-text">
-                <h2 class="post-title">記事2</h2>
-                <p class="post-content">記事本文プレビュー</p>
+                <h2 class="post-title">引数指定：APIと連携して記事タイトルを取得</h2>
+                <p class="post-content">引数指定：APIと連携して記事本文を取得</p>
             </div>
         </section>
     </main>
