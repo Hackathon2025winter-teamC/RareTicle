@@ -6,6 +6,7 @@ from .forms import UserCreateForm, EmailLoginForm
 
 
 # Create your views here.
+# サインアップ
 def signup(request):
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
@@ -19,7 +20,7 @@ def signup(request):
 
     return render(request, 'user/signup.html', {'form': form})
 
-
+# ログイン
 def login_view(request):
     if request.method == 'POST':
         form = EmailLoginForm(request.POST)
@@ -35,3 +36,8 @@ def login_view(request):
     else:
         form = EmailLoginForm()
     return render(request, "user/login.html", {"form": form})
+
+# ログアウト
+def logout_view(request):
+    logout(request)
+    return redirect("user:login")
