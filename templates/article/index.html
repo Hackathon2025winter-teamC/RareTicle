@@ -245,10 +245,16 @@
 </head>
 <body>
     <header>
+        {% if user.is_authenticated %}
+            <p>ログイン中: {{ user.username }}</p>
+        {% else %}
+            <p>ログインしていません</p>
+        {% endif %}
+
         <div class="logo">Rateticle</div>
         <div class="header-right">
-            <a href="#" class="user-profile"><i class="fa-solid fa-user"></i> マイページ</a>
-            <button class="logout-btn">Logout</button>
+            <a href="" class="user-profile"><i class="fa-solid fa-user"></i> マイページ</a>
+            <a href="{% url 'user:logout' %}" class="logout-btn">Logout</a>
         </div>
     </header>
 
