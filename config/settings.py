@@ -87,6 +87,7 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD', 'django_pass'),
         'HOST': os.environ.get('DB_HOST', 'db'),
         'PORT': os.environ.get('DB_PORT', '3306'),
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
@@ -108,6 +109,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# カスタムユーザーモデルを読み込ませるためのコード
+AUTH_USER_MODEL = 'user.UserModel'
+
+AUTHENTICATION_BACKENDS = [
+    'apps.user.auth_backends.EmailBackend',
+]
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 
 # Internationalization
@@ -140,3 +150,9 @@ CSRF_TRUSTED_ORIGINS = [
 
 # CORS_ALLOWED_ORIGINS = ["http://localhost:8080"]
 CORS_ALLOW_ALL_ORIGINS = True
+
+# ログイン/ログアウトURLの設定
+LOGIN_URL = '/user/login/'
+LOGOUT_REDIRECT_URL = '/user/login/'  # ログアウト後のリダイレクト先
+
+LOGIN_REDIRECT_URL = '/article/index'
