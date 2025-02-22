@@ -1,9 +1,9 @@
+<!-- templates/signup.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In | Rareticle</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>新規登録 / Sign Up</title>
     <style>
         * {
             margin: 0;
@@ -91,23 +91,24 @@
         }
     </style>
 </head>
-<body>
-    <div class="sign-in-container">
-        <h1>ログイン</h1>
-        <form action="/signin" method="post">
-            <div class="form-group">
-                <label for="email">Eメール / Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">パスワード / Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="sign-in-btn">ログイン</button>
-        </form>
-        <p class="footer-text">
-            初めてのご利用ですか? <a href="/signup">アカウントを作成</a>
-        </p>
-    </div>
-</body>
+    <body>
+        <div class="sign-in-container">
+            <h1>ログイン Login</h1>
+            <form method="POST">
+                {% csrf_token %} 
+
+                <div class="form-group">
+                    <label for="email">Eメール / Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password1">パスワード / Password</label>
+                    <input type="password" id="password1" name="password1" required>
+                </div>
+                <button type="submit" class="sign-in-btn">ログイン / Login</button>
+            </form>
+            <p class="footer-text">
+                初めてのご利用ですか? <a href="/signup">アカウントを作成</a>
+            </p>
+    </body>
 </html>
