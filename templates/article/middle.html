@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -121,8 +120,7 @@
         /* Align search-links to the right */
         .search-links {
             display: flex;
-            gap: 15px;
-            margin-left: auto;
+            justify-content: flex-end
         }
 
         .search-links a {
@@ -253,31 +251,18 @@
     </header>
 
     <!-- Search Bar + Links -->
-    <div class="search-container">
-        <form class="search-form" action="/search" method="POST">
-            <input type="text" name="query" class="search-input" placeholder="記事を検索..." required>
-            <button type="submit" class="search-btn">
-                <i class="fa-solid fa-search"></i> 検索
-            </button>
-        </form>
-        <div class="search-links">
-            <a href="./index.html">戻る / Return</a>
-        </div>
+    <div class="search-links">
+        <a href="./index.html">戻る / Return</a>
     </div>
 
     <main>
         <section class="post">
             <div class="post-text">
                 <!--  引数はこのテンプレートを使ってくくる　{{data_variable}} -->
-                <h2 class="post-title">引数指定：APIと連携して記事タイトルを取得</h2>
-                <p class="post-content">引数指定：APIと連携して記事本文を取得</p>
-            </div>
-        </section>
-
-        <section class="post">
-            <div class="post-text">
-                <h2 class="post-title">引数指定：APIと連携して記事タイトルを取得</h2>
-                <p class="post-content">引数指定：APIと連携して記事本文を取得</p>
+                <a href="#APIと連携してURLを取得">
+                    <h2 class="post-title">引数指定：APIと連携して記事タイトルを取得</h2>
+                    <p class="post-content">引数指定：APIと連携して記事本文を取得</p>
+                </a>
             </div>
         </section>
     </main>
