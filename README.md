@@ -79,6 +79,73 @@ docker-compose logs db
 
 ![構成図](./infra/aws.drawio.png)
 
+# 本番環境
+
+## 構築
+
+/RareTicle/infra/cdk に移動
+
+### コマンド
+
+- `npm run build` compile typescript to js
+- `npm run watch` watch for changes and compile
+- `npm run test` perform the jest unit tests
+- `cdk deploy` deploy this stack to your default AWS account/region
+- `cdk diff` compare deployed stack with current state
+- `cdk synth` emits the synthesized CloudFormation template
+
+## 接続
+
+SSM 経由で EC2 に接続する
+
+1. IAM ロールの設定
+
+1.1 IAM > ロールに移動
+
+1.2 ロールを作成
+
+1.3 信頼されたエンティティを選択
+信頼されたエンティティタイプ > AWS のサービス
+ユースケース > EC2
+次へ
+
+1.4 許可を追加
+許可ポリシーで AmazonSSMManagedInstanceCore を検索しチェックをいれる
+次へ
+
+1.5 名前、確認、および作成
+
+ロール名は任意の名前を設定
+ロールを作成
+
+2. IAM ロールを EC2 にアタッチ
+
+2.1 EC2 の画面に移動
+2.2 対象の EC2 インスタンスに移動
+2.3 アクション＞セキュリティ＞ IAM ロールを変更
+2.4 IAM ロールから 1 で作成した IAM ロールを選択
+2.5 IAM ロールの更新　※EC2 の台数分、設定が必要
+
+3. Systems Manager の設定
+
+マネジメントコンソールから「Systems Manager」を検索
+セッションマネージャに移動
+「セッションの開始」→ EC2 を選択 → 接続
+
+1 の IAM ロールの設定から数分待つとセッションに EC2 のインスタンス ID が表示されるはず
+
+4. リポジトリを clone する
+
+```bash
+# ホームディレクトリに移動
+cd ~
+sudo git clone https://github.com/Hackathon2025winter-teamC/RareTicle.git
+# 所有者がRootになっているので変更
+sudo chown -R ssm-user:ssm-user ./RareTicle/
+
+cd RareTicle
+```
+
 ## 参考
 
 [全プロジェクトで重宝されるイケてる README を作成しよう！](https://qiita.com/shun198/items/c983c713452c041ef787)
