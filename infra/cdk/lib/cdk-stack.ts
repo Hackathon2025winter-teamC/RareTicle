@@ -6,6 +6,7 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import * as targets from "aws-cdk-lib/aws-elasticloadbalancingv2-targets";
 import * as rds from "aws-cdk-lib/aws-rds";
+import * as iam from "aws-cdk-lib/aws-iam";
 
 export class CdkStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -41,6 +42,15 @@ export class CdkStack extends Stack {
       allowAllOutbound: true,
     });
 
+    // IAM ロールの作成（SSM アクセス許可を付与）
+    const role = new iam.Role(this, "SSMRole", {
+      assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
+    });
+    // SSM の管理ポリシーをアタッチ
+    role.addManagedPolicy(
+      iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")
+    );
+
     // EC2 インスタンスの作成 (2台)
     const ec2Instances = [];
     for (let i = 0; i < 2; i++) {
@@ -54,6 +64,7 @@ export class CdkStack extends Stack {
           ),
           machineImage: ec2.MachineImage.latestAmazonLinux2023(),
           securityGroup: ec2SecurityGroup,
+          role: role,
         })
       );
       // EC2 にユーザーデータ (Nginx, Django セットアップ)
