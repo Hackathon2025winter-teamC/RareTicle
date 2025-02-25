@@ -19,8 +19,7 @@ class UserManager(BaseUserManager):
 
 class UserModel(AbstractBaseUser):
     username = models.CharField(max_length=255)
-    email = models.CharField(max_length=255, unique=True)
-    password = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

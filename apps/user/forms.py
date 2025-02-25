@@ -1,6 +1,7 @@
 from django import forms
 from .models import UserModel
 
+# 新規ユーザー登録フォーム
 class UserCreateForm(forms.ModelForm):
     class Meta:
         model = UserModel
@@ -17,3 +18,8 @@ class UserCreateForm(forms.ModelForm):
         if password != password_confirmation:
             raise forms.ValidationError("パスワードが違います")
         return cleaned_data
+
+# ログインフォーム
+class EmailLoginForm(forms.Form):
+    email = forms.EmailField(label="メールアドレス", max_length=255)
+    password = forms.CharField(label="パスワード", widget=forms.PasswordInput)

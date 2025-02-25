@@ -246,6 +246,11 @@
 </head>
 <body>
     <header>
+        {% if user.is_authenticated %}
+            <p>ログイン中: {{ user.username }}</p>
+        {% endif %}
+
+        <div class="logo">Rateticle</div>
         <div class="logo">Rareticle</div>
         <div class="header-right">
             <button class="logout-btn">Logout</button>

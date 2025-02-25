@@ -10,6 +10,7 @@ services:
       MYSQL_USER: django # 作成されるデータベースユーザー名
       MYSQL_PASSWORD: django_pass # "django" ユーザーのパスワード
     volumes:
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
       - mysql_data:/var/lib/mysql
     ports:
       - "3306:3306" # MySQL のデフォルトポートをホストの 3306 に公開
