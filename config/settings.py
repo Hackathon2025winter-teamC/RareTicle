@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 STATIC_ROOT = '/app/static'
 STATIC_URL = '/static/'
@@ -19,17 +20,23 @@ STATIC_URL = '/static/'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(os.path.join(Path(__file__).resolve().parent.parent, ".env"))  # `.env` のみを読み込む
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*c84s24d9qce1jn8w)c4gc&nl_&d6bhj!!!hu011d5f^rnx6k('
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
+
+
+# Qiita API の設定
+QIITA_API_URL = os.getenv("QIITA_API_URL", "https://qiita.com/api/v2/items")
+QIITA_ACCESS_TOKEN = os.getenv("QIITA_ACCESS_TOKEN")
 
 
 # Application definition
@@ -41,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.myapp'
+    'apps.myapp',
+    'article'
 ]
 
 MIDDLEWARE = [
@@ -59,7 +67,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "article", "templates")],  # ← 明示的に指定
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
