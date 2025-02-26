@@ -250,10 +250,11 @@
             <p>ログイン中: {{ user.username }}</p>
         {% endif %}
 
-        <div class="logo">Rateticle</div>
         <div class="logo">Rareticle</div>
         <div class="header-right">
-            <button class="logout-btn">Logout</button>
+            <a href="{% url 'user:logout' %}">
+                <button class="logout-btn">Logout</button> 
+            </a>
         </div>
     </header>
 
@@ -266,7 +267,7 @@
             </button>
         </form>
         <div class="search-links">
-            <a href="./bookmark.html">お気に入り記事</a>
+            <a href="{% url 'user:signup' %}">お気に入り記事</a>
         </div>
     </div>
 
