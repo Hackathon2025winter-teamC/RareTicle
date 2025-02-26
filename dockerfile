@@ -15,3 +15,5 @@ COPY . .
 
 # 静的ファイル用ディレクトリの作成
 RUN mkdir -p /app/static
+
+RUN apt update && apt install -y default-mysql-client
