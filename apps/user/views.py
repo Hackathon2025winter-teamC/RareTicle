@@ -30,7 +30,7 @@ def login_view(request):
             user = authenticate(request, email=email, password=password)
             if user:
                 login(request, user)
-                return redirect("article:index")
+                return redirect("article:article_list")
             else:
                 return render(request, "user/login.html", {"error": "メールアドレスまたはパスワードが間違っています。"})
     else:

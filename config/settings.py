@@ -29,10 +29,11 @@ load_dotenv(os.path.join(Path(__file__).resolve().parent.parent, ".env"))  # `.e
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
+DEBUG = True # os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
 
+# ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost", "127.0.0.1", "nginx").split(",") if os.getenv("ALLOWED_HOSTS") else []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "nginx"]
 
 # Qiita API の設定
 QIITA_API_URL = os.getenv("QIITA_API_URL", "https://qiita.com/api/v2/items")
