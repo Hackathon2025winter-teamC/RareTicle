@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from apps.article.views import article_detail, article_list
 
 urlpatterns = [
     path("admin/", admin.site.urls),
