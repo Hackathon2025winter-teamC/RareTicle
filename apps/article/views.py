@@ -44,7 +44,7 @@ def article_list(request):
         ]
         cache.set(cache_key, articles, timeout=3600)
 
-    return render(request, "article/index2.html", {"articles": articles, "form": form})
+    return render(request, "article/index.html", {"articles": articles, "form": form})
 
 #記事詳細ページ
 def article_detail(request, article_id):
@@ -71,4 +71,4 @@ def article_detail(request, article_id):
     if not article:
         return HttpResponseNotFound("記事が見つかりませんでした")
 
-    return render(request, "article/middle2.html", {"article": article})
+    return render(request, "article/middle.html", {"article": article})
