@@ -14,7 +14,7 @@ def signup(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
-            return redirect('user:login') # articleのindexに行くように修正必要？
+            return redirect('article:article_list')
     else:
         form = UserCreateForm()
 
