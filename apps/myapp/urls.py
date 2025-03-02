@@ -1,9 +1,6 @@
-# 新規
-from django.urls import path, include
-from . import views
+from django.contrib import admin, include
+from django.urls import path
 
-app_name = "diary"
 url_patterns = [
-    path("", views.index, name="index"),
     path('', include('health_check.urls'))
 ]
