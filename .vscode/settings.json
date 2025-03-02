@@ -1,6 +1,7 @@
 {
-  "markdown-preview-enhanced.previewTheme": "github-dark.css",
-  "markdown-preview-enhanced.mermaidTheme": "dark",
-  "editor.defaultFormatter": "ms-python.black-formatter",
-  "editor.formatOnSave": true
+    "python.analysis.extraPaths": [
+        "./apps"
+    ],
+    "editor.formatOnSave": true
 }
+

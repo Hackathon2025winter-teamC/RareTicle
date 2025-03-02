@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rateticle</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+      }
+
+      header {
+        background-color: white;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+      }
+
+      header .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: black;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        text-decoration: none;
+        color: black;
+        font-size: 14px;
+      }
+
+      .user-profile i {
+        font-size: 20px;
+        color: #555;
+      }
+
+      .logout-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      .logout-btn:hover {
+        background-color: #c0392b;
+      }
+
+      /* Search Bar + Liked & Favorited Links */
+      .search-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background-color: white;
+        border-bottom: 1px solid #ddd;
+        flex-wrap: wrap;
+      }
+
+      .search-form {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        overflow: hidden;
+        padding: 5px;
+        width: 50%;
+        max-width: 400px;
+      }
+
+      .search-input {
+        border: none;
+        outline: none;
+        padding: 10px;
+        font-size: 16px;
+        flex: 1;
+      }
+
+      .search-btn {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        cursor: pointer;
+        border-radius: 25px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .search-btn i {
+        font-size: 16px;
+      }
+
+      .search-btn:hover {
+        background-color: #2980b9;
+      }
+
+      /* Align search-links to the right */
+      .search-links {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .search-links a {
+        text-decoration: none;
+        color: #3498db;
+        font-size: 14px;
+      }
+
+      .search-links a:hover {
+        text-decoration: underline;
+      }
+
+      main {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .post {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .post-text {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .post-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .post-content {
+        font-size: 16px;
+        color: #555;
+      }
+
+      .post-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
+      }
+
+      .like-btn,
+      .favorite-btn {
+        background-color: white;
+        color: #555;
+        border: none;
+        padding: 10px 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: 0.3s;
+      }
+
+      .like-btn i,
+      .favorite-btn i {
+        font-size: 16px;
+      }
+
+      .like-btn:hover,
+      .favorite-btn:hover {
+        color: black;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .header-right {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .logout-btn {
+          width: 100%;
+        }
+
+        .search-container {
+          flex-direction: column;
+          gap: 10px;
+          align-items: flex-start;
+        }
+
+        .search-form {
+          width: 90%;
+        }
+
+        .search-links {
+          margin-left: 0;
+        }
+
+        .post {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .post-actions {
+          width: 100%;
+          flex-direction: row;
+          justify-content: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">RareTicle</div>
+      <div class="header-right">
+        <button class="logout-btn">Logout</button>
+      </div>
+    </header>
+
+    <!-- Search Bar + Links -->
+    <div class="search-links">
+      <a href="{% url 'article:article_list' %}">戻る / Return</a>
+    </div>
+
+    <main>
+      <section class="post">
+        <div class="post-text">
+          <h2>{{ article.title }}</h2>
+          <p><a href="{{ article.url }}" target="_blank">記事を読む</a></p>
+          <div class="post-actions">
+            <button class="favorite-btn">
+              <i class="fa-solid fa-star"></i> お気に入り
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

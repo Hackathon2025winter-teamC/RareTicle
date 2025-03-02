@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 STATIC_ROOT = "/app/static"
 STATIC_URL = "/static/"
@@ -19,27 +20,38 @@ STATIC_URL = "/static/"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(os.path.join(Path(__file__).resolve().parent.parent, ".env"))  # `.env` のみを読み込む
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-*c84s24d9qce1jn8w)c4gc&nl_&d6bhj!!!hu011d5f^rnx6k("
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 
+# ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost", "127.0.0.1", "nginx").split(",") if os.getenv("ALLOWED_HOSTS") else []
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "nginx", "rareticle.click"]
+
+# Qiita API の設定
+QIITA_API_URL = os.getenv("QIITA_API_URL", "https://qiita.com/api/v2/items")
+QIITA_ACCESS_TOKEN = os.getenv("QIITA_ACCESS_TOKEN")
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'apps.user',
+    'corsheaders',
+    'apps.myapp',
+    'apps.article',
 ]
 
 MIDDLEWARE = [
@@ -56,15 +68,15 @@ ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -77,13 +89,14 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get("DB_NAME", "django_db"),
-        "USER": os.environ.get("DB_USER", "django"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "django_pass"),
-        "HOST": os.environ.get("DB_HOST", "db"),
-        "PORT": os.environ.get("DB_PORT", "3306"),
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME', 'django_db'),
+        'USER': os.environ.get('DB_USER', 'django'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'django_pass'),
+        'HOST': os.environ.get('DB_HOST', 'db'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
@@ -106,6 +119,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# カスタムユーザーモデルを読み込ませるためのコード
+AUTH_USER_MODEL = 'user.UserModel'
+
+AUTHENTICATION_BACKENDS = [
+    'apps.user.auth_backends.EmailBackend',
+]
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -127,4 +149,19 @@ STATIC_URL = "static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://nginx",
+]
+
+# CORS_ALLOWED_ORIGINS = ["http://localhost:8080"]
+CORS_ALLOW_ALL_ORIGINS = True
+
+# ログイン/ログアウトURLの設定
+LOGIN_URL = '/user/login/'
+LOGOUT_REDIRECT_URL = '/user/login/'  # ログアウト後のリダイレクト先
+
+LOGIN_REDIRECT_URL = '/article/index'

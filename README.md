@@ -214,3 +214,13 @@ http://www.rareticle.click/
 ## 参考
 
 [全プロジェクトで重宝されるイケてる README を作成しよう！](https://qiita.com/shun198/items/c983c713452c041ef787)
+
+## .env
+
+# 参考記事
+
+Qiita API アクセストークン発行方法
+https://qiita.com/maiamea/items/680cca06f7825595cba0
+
+Qiita API を使って記事一覧を取得する
+https://qiita.com/koki_develop/items/57f86a1abc332ed2185d

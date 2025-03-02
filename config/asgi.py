@@ -8,6 +8,9 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
 """
 
 import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'apps'))
 
 from django.core.asgi import get_asgi_application
 
