@@ -155,7 +155,8 @@ export class CdkStack extends Stack {
         ec2.InstanceClass.T4G,
         ec2.InstanceSize.MICRO
       ),
-      credentials: rds.Credentials.fromGeneratedSecret("admin"),
+      // DBのユーザ名を設定、パスワードはSecrets Manager に自動保存
+      credentials: rds.Credentials.fromGeneratedSecret("django"),
       multiAz: false,
       allocatedStorage: 20,
       securityGroups: [rdsSecurityGroup],

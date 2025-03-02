@@ -137,14 +137,79 @@ SSM 経由で EC2 に接続する
 4. リポジトリを clone する
 
 ```bash
+# セッションマネージャだとssm-userになっているので
+# ec2-userとして作業する
+sudo su ec2-user
+
 # ホームディレクトリに移動
 cd ~
 sudo git clone https://github.com/Hackathon2025winter-teamC/RareTicle.git
 # 所有者がRootになっているので変更
-sudo chown -R ssm-user:ssm-user ./RareTicle/
+sudo chown -R ec2-user:ec2-user ./RareTicle/
 
 cd RareTicle
 ```
+
+5. RDS のパスワード確認
+
+コンソールから AWS Secrets Manager に移動
+概要 > シークレットの値を取得する
+password の値をコピー
+
+6 env ファイル修正
+
+起動した EC2 に移動
+
+```bash
+cd ~/RareTicle
+mv .env.local .env
+vi .env
+```
+
+DB_PASSWORD に RDS のパスワードを記載する
+※EC2、2 台とも記載する必要あり
+
+## Django 設定
+
+```python
+# config/setting.py
+# your-ec2-public-ip → EC2 のパブリック IP または ALB のドメインを設定
+ALLOWED_HOSTS = ["your-ec2-public-ip", "your-alb-domain", "localhost"]
+```
+
+- Nginx の設定
+
+```bash
+sudo nano /etc/nginx/conf.d/django.conf
+```
+
+```bash
+# 下記を記述
+server {
+    listen 80;
+    server_name your-alb-domain;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+```
+
+## Route53 設定
+
+EC2 > ロードバランサーから ALB の DNS 名を確認しておく
+
+レコード名：www
+レコードタイプ：A
+エイリアス：有効にする
+トラフィックのルーティング先：Application Load Balancer と Classic Load Balancer のエイリアス
+ALB の DNS 名を設定する
+レコードを作成
+
+http://www.rareticle.click/
 
 ## 参考
 
