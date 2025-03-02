@@ -114,6 +114,13 @@ export class CdkStack extends Stack {
       );
     }
 
+    // ALBのセキュリティグループ　アウトバウンドを設定
+    const albSecurityGroup = new ec2.SecurityGroup(this, "ALBSecurityGroup", {
+      vpc,
+      description: "Allow all outbound traffic",
+      allowAllOutbound: true, // すべてのアウトバウンド通信を許可
+    });
+
     // ALB の作成
     const alb = new elbv2.ApplicationLoadBalancer(this, "ALB", {
       vpc,
@@ -128,7 +135,8 @@ export class CdkStack extends Stack {
         new targets.InstanceIdTarget(ec2Instances[0].instanceId),
         new targets.InstanceIdTarget(ec2Instances[1].instanceId),
       ],
-      port: 80,
+      // port: 80,
+      port: 8080,
       protocol: elbv2.ApplicationProtocol.HTTP,
       healthCheck: {
         path: "/",
@@ -142,13 +150,11 @@ export class CdkStack extends Stack {
       protocol: elbv2.ApplicationProtocol.HTTP,
       defaultAction: elbv2.ListenerAction.forward([targetGroup]),
     });
-
     // EC2 のセキュリティグループに ALB からの HTTP 通信を許可:
     ec2SecurityGroup.addIngressRule(
-      ec2.Peer.securityGroupId(
-        alb.connections.securityGroups[0].securityGroupId
-      ),
-      ec2.Port.tcp(80),
+      albSecurityGroup,
+      // ec2.Port.tcp(80),
+      ec2.Port.tcp(8080),
       "Allow ALB to communicate with EC2"
     );
     // RDS の作成 (プライベートサブネットのみ)
