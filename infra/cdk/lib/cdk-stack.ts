@@ -51,6 +51,18 @@ export class CdkStack extends Stack {
       iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")
     );
 
+    // `SessionDuration` を 12時間 (43200秒) に設定
+    role.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW, // 許可 (Allow) のポリシーを定義
+        actions: ["ssm:StartSession"], // AWS Systems Manager (SSM) のセッション開始を許可
+        resources: ["*"], // すべてのリソースに適用（特定のEC2インスタンスのARNを指定することも可能）
+        conditions: {
+          NumericLessThanEquals: { "ssm:SessionDuration": 43200 }, // セッションの最大持続時間を 12時間 (43200秒) に制限
+        },
+      })
+    );
+
     // EC2 インスタンスの作成 (2台)
     const ec2Instances = [];
     for (let i = 0; i < 2; i++) {
